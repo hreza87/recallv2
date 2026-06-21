@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Revise</h1>
+<p class="hint">Choose a topic. Recall will pick the questions you need most.</p>
+
+{% if topics %}
+    <div class="topic-grid">
+        {% for topic in topics %}
+            <a class="topic-card" href="{{ url_for('quiz', topic_id=topic.id) }}">
+                <span class="topic-name">{{ topic.name }}</span>
+                <span class="topic-go">Start &rarr;</span>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>There are no topics yet. Ask your teacher to add some.</p>
+{% endif %}
+
+{% endblock %}

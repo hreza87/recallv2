@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--
+    base.html
+    This is the shared layout. Every other page "extends" this one, so the
+    navigation bar and styling only have to be written once. The block tags
+    below mark where each page puts its own content.
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recall — Adaptive Revision</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('home') }}">Recall</a>
+        <nav class="site-nav">
+            {% if current_user.is_authenticated %}
+                {% if current_user.role == "student" %}
+                    <a href="{{ url_for('student_dashboard') }}">Revise</a>
+                    <a href="{{ url_for('focus_areas') }}">Focus areas</a>
+                {% endif %}
+                {% if current_user.role == "teacher" %}
+                    <a href="{{ url_for('teacher_dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('manage_questions') }}">Questions</a>
+                {% endif %}
+                <span class="who">{{ current_user.username }}</span>
+                <a class="logout" href="{{ url_for('logout') }}">Log out</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Log in</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page">
+        <!-- Flash messages are short notes (errors or confirmations). -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p class="message">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
